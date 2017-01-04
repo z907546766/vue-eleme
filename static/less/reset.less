@@ -1,0 +1,56 @@
+// 字体大小
+.fontSize( @font-size ) {
+	font-size: @font-size;
+	[data-dpr="2"] & {
+		font-size: @font-size * 2;
+	}
+	;
+	[data-dpr="3"] & {
+		font-size: @font-size * 3;
+	}
+};
+// 设置字体高度的一半
+.fontSizeHalf( @font-size ) {
+	margin-top: @font-size / 2;
+	[data-dpr="2"] & {
+		margin-top: @font-size * 2 / 2;
+	}
+	;
+	[data-dpr="3"] & {
+		margin-top: @font-size * 3 / 2;
+	}
+};
+// 背景图片
+.bgImg( @url ) {
+	background: url( "../../src/components/@{url}@2x.png" )no-repeat center;
+	[data-dpr="2"] & {
+		background: url("../../src/components/@{url}@2x.png")no-repeat center;
+	}
+	;
+	[data-dpr="3"] & {
+		background: url("../../src/components/@{url}@3x.png")no-repeat center;
+	}
+};
+// 图标背景
+.iconBg(@dir,@num,@width,@height){
+	&.decrease{
+		.bgImg("@{dir}/img/decrease_@{num}");
+		background-size:@width @height;
+	}
+	&.discount{
+		.bgImg("@{dir}/img/discount_@{num}");
+		background-size:@width  @height  ;
+	}
+	&.special{
+		.bgImg("@{dir}/img/special_@{num}");
+		background-size:@width  @height  ;
+	}
+	&.invoice{
+		.bgImg("@{dir}/img/invoice_@{num}");
+		background-size:@width  @height  ;
+	}
+	&.guarantee{
+		.bgImg("@{dir}/img/guarantee_@{num}");
+		background-size:@width  @height  ;
+	}
+}
