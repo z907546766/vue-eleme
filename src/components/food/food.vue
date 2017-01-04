@@ -2,51 +2,50 @@
 	<transition  name="slide"
 	enter-active-class="animated slideInRight"
 	leave-active-class="animated slideOutRight">
-	<div class="food" v-show="showFlag" id="food">
-		<div class="scroll">
-			<div class="food-pic">
-				<img :src="food.image" alt="食物" width="100%" height="100%">
-			</div>
-			<!-- 返回按钮 -->
-			<div class="back" @touchstart="hide">
-				<i class="icon-arrow_lift"></i>
-			</div>
-			<div class="food-content">
-				<div class="food-title">
-					<h3 class="name" v-text="food.name"></h3>
-					<p class="num">
-						<span  v-text="'月售'+food.sellCount+'份'"></span>
-						<span v-text="'好评率'+food.rating +'%'"></span>
-					</p>
-					<div class="price">
-						<span v-text="'￥'+food.price"></span>
-						<del v-text="food.oldPrice||''" ></del>
-						<button v-show="!food.count||food.count==0" @touchstart="addFood($event)">加入购物车</button>
-						<cartcontrol :food="food" v-show="food.count>0" ></cartcontrol>
+		<div class="food" v-show="showFlag" id="food">
+			<div class="scroll">
+				<div class="food-pic">
+					<img :src="food.image" alt="食物" width="100%" height="100%">
+				</div>
+				<!-- 返回按钮 -->
+				<div class="back" @touchstart="hide">
+					<i class="icon-arrow_lift"></i>
+				</div>
+				<div class="food-content">
+					<div class="food-title">
+						<h3 class="name" v-text="food.name"></h3>
+						<p class="num">
+							<span  v-text="'月售'+food.sellCount+'份'"></span>
+							<span v-text="'好评率'+food.rating +'%'"></span>
+						</p>
+						<div class="price">
+							<span v-text="'￥'+food.price"></span>
+							<del v-text="food.oldPrice||''" ></del>
+							<button v-show="!food.count||food.count==0" @touchstart="addFood($event)">加入购物车</button>
+							<cartcontrol :food="food" v-show="food.count>0" ></cartcontrol>
+						</div>
 					</div>
+					<!-- 分割条 -->
+					<divider></divider>
+					<!-- 商品介绍 -->
+					<div class="food-desc">
+						<h4 class="title">商品介绍</h4>
+						<p class="desc" v-text="food.info"v-show="food.info" ></p>
+					</div>
+					<!-- 分割条 -->
+					<divider></divider>
+					<!-- 评论 -->
+					<div class="food-rating">
+						<h4 class="title">商品评价</h4>
+						<!-- 组件 -->
+						<reatingSelect :ratings="food.ratings" :ratingType="ratingType" :pageId="pageId" :onlyContent="onlyContent" :state="state" @select="nowSelected" @check="nowChecked" ref="reatingSelect"></reatingSelect>
+					</div>
+					<!-- 占位 -->
+					<div class="bottom"></div>
 				</div>
-				<!-- 分割条 -->
-				<divider></divider>
-				<!-- 商品介绍 -->
-				<div class="food-desc">
-					<h4 class="title">商品介绍</h4>
-					<p class="desc" v-text="food.info"v-show="food.info" ></p>
-				</div>
-				<!-- 分割条 -->
-				<divider></divider>
-				<!-- 评论 -->
-				<div class="food-rating">
-					<h4 class="title">商品评价</h4>
-					<!-- 组件 -->
-					<reatingSelect :ratings="food.ratings" :ratingType="ratingType" :pageId="pageId" :onlyContent="onlyContent" :state="state" @select="nowSelected" @check="nowChecked" ref="reatingSelect"></reatingSelect>
-				</div>
-				<!-- 占位 -->
-				<div class="bottom"></div>
 			</div>
 		</div>
-	</div>
-</transition>
-
+	</transition>
 </template>
 
 <script>
