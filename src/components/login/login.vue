@@ -67,12 +67,14 @@
 
 		methods:{
 			nowPage(msg){
+				this.name="";
 				if(msg){
 					this.Show=false;
 				}else{
 					// 短信登陆
 					this.Show=true;
 				}
+
 			},
 			// 验证用户名
 			checkName(){
@@ -90,10 +92,13 @@
 			},
 			sendMsg(){
 				// 验证失败返回
-				if(!this.checkName()||!this.firstDisable){
+				if(!this.checkName()){
 					return;
 				}
 				this.disabled=true;
+				if(!this.firstDisable){
+					return;
+				}
 				// 发送验证码倒计时
 				let n=30;
 					this.timer=setInterval(()=>{
@@ -103,6 +108,7 @@
 							this.disabled=false;
 							this.text="重新发送"
 							clearInterval(this.timer);
+							this.firstDisable=true;
 							return;
 						}
 						this.text="已发送("+n+"s)"
@@ -130,7 +136,7 @@
 					console.log("验证成功");
 				}
 			},
-			// 用户名登陆切换密码显示隐藏开关
+			// 用户名登陆切换时,密码显示隐藏开关
 			switchNow(){
 				this.active=!this.active;
 				if(this.active){

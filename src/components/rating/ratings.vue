@@ -75,7 +75,7 @@ export default {
 			},
 			methods:{
 				feachData(){
-					this.$http.get("http://localhost:8086/ratings?id="+this.$route.query._id+"").then((data)=>{
+					this.$http.get("http://192.168.0.113:8086/ratings?id="+this.$route.query._id+"").then((data)=>{
     		 // 成功
     		 var json=data.data;
     		 if(json.error==ERR_OK){

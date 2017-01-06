@@ -72,7 +72,7 @@
 				goods:null,
 				foodsListH:[],
 				scrollY:0,
-				selectedFoods:{}
+				selectedFoods:{},
 			}
 		},
 		created(){
@@ -86,10 +86,10 @@
     	computed:{
     		// 左侧食品分类栏
     		nowIndex(){
-    			for (let i = 0; i < this.foodsListH.length; i++) {
+    				for (let i = 0,len=this.foodsListH.length; i < len; i++) {
     				let height1=this.foodsListH[i];
     				let height2=this.foodsListH[i+1];
-    				if(!height2||this.scrollY>=height1&&this.scrollY< height2 ){
+    				if(!height2||this.scrollY>=height1&&this.scrollY<height2 ){
     					return i;
     				}
     			}
@@ -113,7 +113,7 @@
     		// 加载数据
     		fetchData(){
     			this.loading=true;
-    			this.$http.get("http://localhost:8086/goods?id="+this.$route.query._id+"").then((data)=>{
+    			this.$http.get("http://192.168.0.113:8086/goods?id="+this.$route.query._id+"").then((data)=>{
 		    		 // 成功
 		    		 this.loading=false;
 		    		 let json=data.data;
@@ -155,7 +155,8 @@
     			})
     			// 获取滚动时的位置
     			this.foodScroll.on("scroll",(pos)=>{
-    				this.scrollY=Math.abs(Math.round(this.foodScroll.y));
+    				let _this=this.foodScroll;
+    			this.scrollY=Math.abs(Math.floor(_this.y));
     			})
     		},
     		calculateH(){
@@ -170,8 +171,9 @@
     		},
     		scrollTo(index,event){
     			let els=this.$refs.foodsWrapper.querySelectorAll('.food-list-hook');
+    			let H=-this.foodsListH[index];
 				// 左侧点击右侧滚动
-				this.foodScroll.scrollToElement(els[index],300);
+				this.foodScroll.scrollTo(0,H,300);
 			},
 			select(food,event) {
 				this.selectedFoods=food;

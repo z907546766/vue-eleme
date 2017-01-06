@@ -1,22 +1,25 @@
 <template>
 	<div class="search-wrapper" id="searchWrapper">
 		<div class="scroll">
+			<!-- 头部 -->
 			<navbar></navbar>
+			<!-- 搜索框 -->
 			<form action="" class="search-form">
 				<div class="search">
 					<input type="text" value="" placeholder="请输入商家或美食名称" class="search-input" v-model="val" @keyup="showHistoryPanel($event)">
 					<input type="button" value="搜索" class="search-btn" @touchstart="searchResult" >
 				</div>
 			</form>
+			<!-- 搜索结果 -->
 			<div class="search-result">
 				<!-- 搜索失败 -->
-				<p class="search-err"  v-show="searchData.length==0&&!showNow">
+				<p class="search-err"  v-show="errorShowNow">
 					搜索不到[
 					<a href="" v-text="errorVal" class="searchVal"></a>
 					]的信息
 				</p>
 				<!-- 搜索成功 -->
-				<div class="search-success" v-show="searchData.length>0&&!showNow">
+				<div class="search-success" v-show="successShowNow">
 					<h2 class="title">商家</h2>
 					<ul class="search-list">
 						<li v-for="item in searchData">
@@ -47,7 +50,7 @@
 					</ul>
 				</div>
 				<!-- 搜索历史 -->
-				<div class="search-history" v-show="showNow&&historyData.length>0">
+				<div class="search-history" v-show="historyShowNow&&historyData.length>0">
 					<h2>搜索历史</h2>
 					<ul class="search-list">
 						<li  v-for="(item,index) in historyData" @touchstart.prevent.stop="searchAgain(index)">
@@ -58,7 +61,15 @@
 					<p @touchstart="empty">清空历史记录</p>
 				</div>
 			</div>
-			<p class="loadMore" v-show="showMore">{{loadingText}}</p>
+			<!-- 搜索提示 -->
+			<div  v-show="loadingSuccess" class="loadingInfo">
+				搜索中...
+			</div>
+			<div  v-show="loadingError" class="loadingInfo">
+				网络连接错误,请重试
+			</div>
+			<!-- 加载提示 -->
+			<div v-show="showMore" class="loadMore" >{{loadingText}}</div>
 		</div>
 	</div>
 </template>
@@ -75,11 +86,17 @@
 				val:'',
 				errorVal:"",
 				searchData:[],
-				showNow:true,
+				// 控制面板的显示和隐藏
+				historyShowNow:true,
+				successShowNow:false,
+				errorShowNow:false,
 				// 储存历史数据
 				historyData:[],
 				firstLoading:true,
 				showMore:false,
+				// 搜索提示
+				loadingSuccess:false,
+				loadingError:false,
 				page:0,
 				loadingText:"加载中...",
 				status:0
@@ -96,50 +113,71 @@
 				if(!this.val){
 					return;
 				};
-				// 加载更多不删除前面加载的内容,否则,反之
+				// 搜索提示
+				this.loadingSuccess=true;
+				this.loadingError=false;
+				// 隐藏历史记录
+				this.historyShowNow=false;
 				if(this.firstLoading){
-					// 隐藏历史记录
-					this.showNow=false;
+					// 加载更多不删除前面加载的内容,否则,反之
 					this.searchData=[];
 				}
 				// 发送请求
-				this.$http.get("http://localhost:8086/search?name="+this.val+"&page="+this.page+"").then((data)=>{
+				this.$http.get("http://192.168.0.113:8086/search?name="+this.val+"&page="+this.page+"").then((data)=>{
 					let result=data.data;
+						// 搜索提示
+						this.loadingSuccess=false;
 					// 搜索到数据成功
 					if(result.status==1){
+						// 搜索成功,失败面板隐藏,成功面板显示
+						this.successShowNow=true;
+						this.errorShowNow=false;
 						for (let i = 0,len=result.data.length; i < len; i++) {
 							this.searchData.push(result.data[i])
 						};
+						// 第一次搜索成功后加载滚动
 						if(this.firstLoading){
 							this.$nextTick(()=>{
 								this.scroll();
 								this.firstLoading=false;
 							})
 						}
+					}else if(result.status==2){
 					//搜索到数据末尾
-				}else if(result.status==2){
 					this.status=result.status;
+				}else if(result.status==0){
+					// 搜索失败,成功面板隐藏,失败面板显示
+					this.errorShowNow=true;
+					this.successShowNow=false;
 					// 搜索数据失败
-				}else{
 					this.errorVal=this.val;
 				}
 			},(err)=>{
+				this.loadingSuccess=false;
+				this.loadingError=true;
+
 			})
 			},
 			searchResult(){
-				if(this.val==""){
+				if(this.val==""||!this.val.trim()){
 					return;
 				};
 				if(this.myScroll){
 					this.myScroll.destroy();
 				}
-				// 点击搜索按钮就初始化
+				// 点击搜索按钮初始化
 				this.page=0;
 				this.firstLoading=true;
+				this.loadingSuccess=true;
+				this.loadingError=false;
+				// 控制面板的显示和隐藏
+				this.historyShowNow=false;
+				this.successShowNow=false;
+				this.errorShowNow=false;
 				this.sendHttp();
 				// 搜索内容已经搜索过,不在添加在搜索历史
 				for (let i = 0,len=this.historyData.length; i <len; i++) {
-					if(this.historyData[i]==this.val){
+					if(this.historyData[i].trim()==this.val.trim()){
 						return;
 					}
 				}
@@ -163,15 +201,19 @@
 			},
 			// 清空
 			empty(){
+				this.historyShowNow=false;
+				this.historyData=[];
 				if(this.myScroll){
 					this.myScroll.destroy();
 				}
-				this.historyData=[];
 				window.localStorage.clear();
 			},
 			deleteData(index){
 				// 删除数组中index元素
 				this.historyData.splice(index,1);
+				if(this.historyData.length==0){
+					this.historyShowNow=false;
+				}
 				if(window.localStorage){
 					// 清空本地储存
 					window.localStorage.clear();
@@ -182,7 +224,13 @@
 	  		// 按键为Backspace并且数据为空,显示历史面板
 	  		showHistoryPanel(event){
 	  			if(event.keyCode==8&&this.val==""){
-	  				this.showNow=true;
+	  				// 初始化
+	  				// 搜索提示
+	  				this.loadingSuccess=false;
+	  				this.loadingError=false;
+	  				this.historyShowNow=true;
+	  				this.successShowNow=false;
+	  				this.errorShowNow=false;
 	  				if(this.myScroll){
 	  					this.myScroll.destroy();
 	  				}
@@ -201,14 +249,15 @@
 	  			});
 	  			this.myScroll.on("scroll",()=>{
 	  				let _this=this.myScroll;
-	  				if(_this.maxScrollY-_this.y>0&&_this.maxScrollY-_this.y<40){
+	  				let disY=_this.maxScrollY-_this.y;
+	  				if(disY>0&&disY<40){
 	  					this.showMore=true;
 	  					this.loadingText="正在加载中...";
 	  				}
 	  				if(this.status==2){
 	  					this.loadingText="没有更多内容啦";
 	  				}
-	  				if(_this.maxScrollY-_this.y>40){
+	  				if(disY>40){
 	  					if(this.firstLoading){
 	  						this.page++;
 	  						this.firstLoading=false;
@@ -220,6 +269,7 @@
 	  				if(!this.firstLoading){
 	  					this.$nextTick(()=>{
 	  						this.showMore=false;
+	  						// 成功后加载更多刷新滚动
 	  						this.myScroll.refresh();
 	  						this.firstLoading=true;
 	  					})
@@ -289,6 +339,7 @@
 						padding: 0.266667rem;
 						border-bottom: 1px solid rgb(221, 221, 221);
 						.sellerInfo-pic{
+							width:1.733333rem;
 							height:1.066667rem;
 						}
 						.sellerInfo-desc{
@@ -385,6 +436,11 @@
 				background-color: #fff;
 				color: rgb(49, 153, 232);
 			}
+		}
+		.loadingInfo{
+			margin-top:50%;
+			text-align: center;
+			.fontSize(16px);
 		}
 		.loadMore{
 			position: absolute;

@@ -77,7 +77,7 @@ export default {
 		// 初始化
 		feachData(){
 			this.loading=true;
-			this.$http.get("http://localhost:8086/home").then((data)=>{
+			this.$http.get("http://192.168.0.113:8086/home").then((data)=>{
 				this.loading=false;
 				let json=data.data;
 				if(json.error==ERR_OK){

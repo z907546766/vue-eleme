@@ -72,7 +72,8 @@
 			return {
 				show:false,
 				selectFs:[],
-				enough:false
+				enough:false,
+				selectedFoods:[]
 			};
 		},
 		components:{
