@@ -8,7 +8,7 @@
 （该作品为个人学习vue时候的练习作品,其中有很多不足之处,欢迎指正！）
 
 ###效果图:
-![img]()
+![img](https://github.com/z907546766/vue-eleme/blob/master/static/img/vueEleme.gif)
 
 ###原理说明
 * 项目基于vue2.0构建。
