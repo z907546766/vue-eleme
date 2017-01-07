@@ -4,7 +4,7 @@
 			<div class="scroll">
 				<div class="rating">
 					<div class="rating-left">
-						<p class="score" v-text="seller.score"></p>
+						<p class="score" v-text="score"></p>
 						<p class="ComScore" v-text="">综合评分</p>
 						<p class="overtop" v-text="'高于周边商家'+seller.rankRate+'%'"></p>
 					</div>
@@ -54,7 +54,7 @@ const state={
 const ERR_OK=0;
 export default {
 	name: 'rating',
-	props:["seller"],
+	props:["seller","score"],
 	data () {
 		return {
 			ratings:[],
@@ -75,7 +75,7 @@ export default {
 			},
 			methods:{
 				feachData(){
-					this.$http.get("http://192.168.0.113:8086/ratings?id="+this.$route.query._id+"").then((data)=>{
+					this.$http.get("http://localhost:8086/ratings?id="+this.$route.query._id+"").then((data)=>{
     		 // 成功
     		 var json=data.data;
     		 if(json.error==ERR_OK){

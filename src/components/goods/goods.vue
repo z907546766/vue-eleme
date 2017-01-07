@@ -113,7 +113,7 @@
     		// 加载数据
     		fetchData(){
     			this.loading=true;
-    			this.$http.get("http://192.168.0.113:8086/goods?id="+this.$route.query._id+"").then((data)=>{
+    			this.$http.get("http://localhost:8086/goods?id="+this.$route.query._id+"").then((data)=>{
 		    		 // 成功
 		    		 this.loading=false;
 		    		 let json=data.data;

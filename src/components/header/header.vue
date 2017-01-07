@@ -109,14 +109,15 @@
 			showSeller(){
 				this.$refs.sellerShow.show();
 			},
+			// 返回主页
 			back(){
+				this.$emit("clearlocalS")
 				this.$router.push("/");
 			}
 		},
 		components:{
 			Seller,
 			star
-
 		}
 	};
 </script>

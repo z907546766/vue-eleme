@@ -93,6 +93,7 @@
 				// 储存历史数据
 				historyData:[],
 				firstLoading:true,
+				scrollLoading:true,
 				showMore:false,
 				// 搜索提示
 				loadingSuccess:false,
@@ -123,12 +124,13 @@
 					this.searchData=[];
 				}
 				// 发送请求
-				this.$http.get("http://192.168.0.113:8086/search?name="+this.val+"&page="+this.page+"").then((data)=>{
+				this.$http.get("http://localhost:8086/search?name="+this.val+"&page="+this.page+"").then((data)=>{
 					let result=data.data;
 						// 搜索提示
 						this.loadingSuccess=false;
 					// 搜索到数据成功
 					if(result.status==1){
+						this.status=result.status;
 						// 搜索成功,失败面板隐藏,成功面板显示
 						this.successShowNow=true;
 						this.errorShowNow=false;
@@ -250,30 +252,36 @@
 	  			this.myScroll.on("scroll",()=>{
 	  				let _this=this.myScroll;
 	  				let disY=_this.maxScrollY-_this.y;
-	  				if(disY>0&&disY<40){
-	  					this.showMore=true;
-	  					this.loadingText="正在加载中...";
-	  				}
-	  				if(this.status==2){
-	  					this.loadingText="没有更多内容啦";
-	  				}
-	  				if(disY>40){
-	  					if(this.firstLoading){
+	  				if(this.scrollLoading){
+	  					if(disY>0&&disY<40){
+	  						this.showMore=true;
+	  						this.scrollLoading=false;
+	  						this.loadingText="正在加载中...";
+	  					}
+	  				};
+	  				if(!this.scrollLoading){
+	  					if(disY>40){
 	  						this.page++;
-	  						this.firstLoading=false;
 	  						this.sendHttp();
+	  						this.scrollLoading=true;
+	  						if(this.status==2){
+	  							this.loadingText="没有更多内容啦";
+	  						};
+
+
 	  					}
 	  				}
 	  			});
 	  			this.myScroll.on("scrollEnd",()=>{
-	  				if(!this.firstLoading){
+	  				this.showMore=false;
+	  				this.scrollLoading=true;
+	  				if(this.status==1){
 	  					this.$nextTick(()=>{
-	  						this.showMore=false;
 	  						// 成功后加载更多刷新滚动
 	  						this.myScroll.refresh();
-	  						this.firstLoading=true;
 	  					})
 	  				}
+
 	  			})
 	  		}
 	  	},

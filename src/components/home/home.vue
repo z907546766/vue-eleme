@@ -24,7 +24,8 @@
 			</h1>
 			<ul class="sales-info" v-show="sellers" ref="sellersDom">
 				<li v-for="seller in sellers.sellers" @tap="salesShow(seller,$event)">
-					<div class="newAdd" v-show="">
+				<!-- 此处判断条件无效 -->
+					<div class="newAdd" v-show="seller.deliveryTime>20">
 						<span>新增</span>
 					</div>
 					<div class="img">
@@ -33,8 +34,8 @@
 					<div class="info">
 						<h2 class="name" v-text="seller.name"></h2>
 						<div class="score">
-							<star :size="24" :score="seller.score"></star>
-							<span class="score-num">{{seller.score}}</span>
+							<star :size="24" :score="score(seller)"></star>
+							<span class="score-num">{{score(seller)}}</span>
 							<span class="sell-num">月售{{seller.sellCount}}单</span>
 						</div>
 						<p class="priceTime">
@@ -45,7 +46,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="reloadMore" v-show="showMore">加载更多</div>
+		<div class="reloadMore" v-show="showMore">{{loadingText}}</div>
 	</div>
 </template>
 
@@ -67,7 +68,8 @@ export default {
 			categorys:[],
 			selectSeller:{},
 			showMore:false,
-			first:true
+			first:true,
+			loadingText:"加载中..."
 		};
 	},
 	created(){
@@ -77,7 +79,7 @@ export default {
 		// 初始化
 		feachData(){
 			this.loading=true;
-			this.$http.get("http://192.168.0.113:8086/home").then((data)=>{
+			this.$http.get("http://localhost:8086/home").then((data)=>{
 				this.loading=false;
 				let json=data.data;
 				if(json.error==ERR_OK){
@@ -85,8 +87,7 @@ export default {
 					//合并重复分类,用于滑动,在slidejs中设置innerHTML时,点击事件无效
 					this.categorys=[].concat(json.category,json.category)
 					// 获取商家数据
-					this.sellers=json.seller;
-					this.showMore=true;
+					this.sellers=json.sellers;
 					this.$emit("getSellersData",this.sellers);
 				}
 				// 滚动
@@ -109,6 +110,12 @@ export default {
 				this.err=true;
 			})
 		},
+		// 综合得分
+		score(seller){
+			let num=(seller.serviceScore+seller.foodScore)/2;
+			let score=num.toFixed(1);
+			return score;
+		},
 		scroll(){
 			this.myScroll=new iScroll("#homeWrapper",{
 				scrollY:true,
@@ -120,16 +127,25 @@ export default {
 				tap: true,
 				probeType:3
 			})
-			// // 上拉
-			// this.myScroll.on("scroll",()=>{
-			// 	if(this.first){
-			// 		if(this.myScroll.maxScrollY - this.myScroll.y > 40){
-			// 			console.log(this.myScroll.y);
-			// 			this.first=false;
-			// 		}
-
-			// 	}
-			// })
+			//  上拉
+			this.myScroll.on("scroll",()=>{
+				let _this=this.myScroll;
+				let disY=_this.maxScrollY -_this.y;
+				if(this.first){
+					if( disY>0&&disY <40){
+						this.showMore=true;
+						this.loadingText="正在加载中..."
+						this.first=false;
+					}
+				}
+				if(!this.first){
+					// 模拟无更多数据
+					if(disY>40){
+						this.first=true;
+						this.loadingText="没有更多内容"
+					}
+				}
+			})
 		},
 		salesShow(seller,event){
 			this.selectSeller=seller;
@@ -142,9 +158,6 @@ export default {
 		destroyScroll(){
 			// 销毁滚动
 			this.myScroll.destroy();
-		},
-		showList(event){
-
 		}
 	},
 	components:{

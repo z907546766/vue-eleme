@@ -1,22 +1,22 @@
  <template>
-   <transition name="slide" enter-active-class="animated sildeInRight"  leave-active-class="animated sildeOutRight">
-    <div class="sales">
-        <v-header :seller="selectedSeller"></v-header>
-        <div class="tab">
-            <div class="tab-item">
-                <router-link :to="{path:'/sales/goods',query:{_id:selectedSeller._id}}" class="tab-item-list">
-                    <span>商品</span>
-                </router-link>
+     <transition name="slide" enter-active-class="animated sildeInRight"  leave-active-class="animated sildeOutRight">
+        <div class="sales">
+            <v-header :seller="selectedSeller" @clearlocalS="clearlocalS"></v-header>
+            <div class="tab">
+                <div class="tab-item">
+                    <router-link :to="{path:'/sales/goods',query:{_id:selectedSeller._id}}" class="tab-item-list">
+                        <span>商品</span>
+                    </router-link>
+                </div>
+                <div class="tab-item">
+                    <router-link  :to="{path:'/sales/rating',query:{_id:selectedSeller._id} }"  class="tab-item-list">
+                        <span v-text="'评价 ('+score+'分)'"></span>
+                    </router-link>
+                </div>
             </div>
-            <div class="tab-item">
-                <router-link  :to="{path:'/sales/rating',query:{_id:selectedSeller._id} }"  class="tab-item-list">
-                    <span v-text="'评价 ('+selectedSeller.foodScore+'分)'"></span>
-                </router-link>
-            </div>
+            <router-view :seller="selectedSeller" ref="goods" :score="score"></router-view>
         </div>
-        <router-view :seller="selectedSeller" ref="goods"></router-view>
-    </div>
-</transition>
+    </transition>
 </template>
 
 <script>
@@ -37,13 +37,25 @@
                 if(val){
                     this.selectedSeller=JSON.parse(val);
                 }else{
-                 window.localStorage.setItem("name_"+this.$route.query._id+"",JSON.stringify(this.selectSeller))
-                 }
-             }
-         },
-     components: {
-       "v-header":header
-   }
+                   window.localStorage.setItem("name_"+this.$route.query._id+"",JSON.stringify(this.selectSeller))
+               }
+           }
+       },
+       computed:{
+        score(){
+            let num=(this.selectedSeller.serviceScore+this.selectedSeller.foodScore)/2;
+            let score=num.toFixed(1);
+            return score;
+        }
+    },
+    methods:{
+        clearlocalS(){
+            window.localStorage.clear();
+        }
+    },
+    components: {
+     "v-header":header
+ }
 }
 </script>
 
@@ -55,13 +67,13 @@
     }
 
     .sales{
-       position: fixed;
-       left: 0;
-       top:0;
-       width: 100%;
-       height: 100%;
-       z-index:22;
-       .tab {
+     position: fixed;
+     left: 0;
+     top:0;
+     width: 100%;
+     height: 100%;
+     z-index:22;
+     .tab {
         position: relative;
         z-index:2;
         display: -webkit-box;
