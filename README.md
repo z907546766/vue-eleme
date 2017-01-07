@@ -21,9 +21,9 @@
 
 
 ###使用方法
-
+	运行Vue
 		npm run dev
-
+	启动node服务
 		nodemon
 
 
