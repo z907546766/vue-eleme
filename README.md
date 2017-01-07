@@ -5,13 +5,13 @@
 > 关于我，欢迎关注<br>
   微信：[年华何日不离伤](tao907546766)
 
-（该作品为个人学习vue时候的练习作品,其中有很多不足之处,欢迎指正！）
+（该作品为个人学习vue时候的练习demo,其中有很多不足之处,欢迎指正！）
 
 ###效果图:
-![img](https://github.com/z907546766/vue-eleme/blob/master/static/img/vueEleme.gif)
+![img]()
 
 ###原理说明
-* 项目基于vue2.0构建。
+* 作品基于vue2.0构建。
 * 使用iScroll.js进行页面的滚动效果。
 * 使用淘宝flexible.js进行页面的适配。
 * 使用animate.css实现动画效果。
@@ -35,4 +35,4 @@ node文件夹与vue项目分开后再运行！！
 
 
 ## License
-个人作品
+个人练习demo
