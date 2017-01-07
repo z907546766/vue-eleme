@@ -21,11 +21,11 @@
 
 
 ###使用方法
-运行Vue
+1、运行Vue
 
 		npm run dev
 
-启动node服务
+2、启动node服务
 
 		nodemon
 
