@@ -8,9 +8,11 @@
 （该作品为个人学习vue时候的练习demo,其中有很多不足之处,欢迎指正！）
 
 ###效果图:
+
 ![img](https://github.com/z907546766/vue-eleme/blob/master/static/img/vueEleme.gif)
 
 ###原理说明
+
 * 作品基于vue2.0构建。
 * 使用iScroll.js进行页面的滚动效果。
 * 使用淘宝flexible.js进行页面的适配。
@@ -21,6 +23,7 @@
 
 
 ###使用方法
+
 1、运行Vue
 
 		npm run dev
@@ -31,6 +34,7 @@
 
 
 ### 注意事项
+
 node文件夹与vue项目分开后再运行！！
 
 
