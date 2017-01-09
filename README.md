@@ -18,7 +18,7 @@
 * 使用淘宝flexible.js进行页面的适配。
 * 使用animate.css实现动画效果。
 * 使用百度地图api进行初略地址模拟。
-* 使用less进行css编写。
+* 使用less进行css编译。
 * 服务端使用koa2搭建,通过使用mock.js模拟数据。
 
 
