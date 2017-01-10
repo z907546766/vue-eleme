@@ -1,7 +1,7 @@
 <template>
-	<div class="shopcart-wrapper">
+	<section class="shopcart-wrapper">
 	<!-- 购物车 -->
-		<div class="shopcart">
+		<section class="shopcart">
 			<div class="shopcart-shop" >
 				<div class="shop-content" @touchstart="toggleList">
 					<div class="login-wrapper">
@@ -17,10 +17,10 @@
 				</div>
 				<div class="shop-btn"  v-text="disPrice" :class="{enough:enough}" @touchstart.stop.prevent="pay">
 				</div>
-			</div>
+		</section>
 			商品列表
 			<transition name="fold">
-				<div class="shopcart-list" v-show="listshow" >
+				<section class="shopcart-list" v-show="listshow" >
 					<div class="list-header">
 						<h1>购物车</h1>
 						<span @touchstart="empty">清空</span>
@@ -30,11 +30,11 @@
 							<li class="list-item"  v-for="food in selectFoods">
 								<h2 class="name" v-text="food.name"></h2>
 								<span class="price" v-text="'￥'+food.price*food.count"></span>
-								<cartcontrol :food="food"></cartcontrol>
+								<my-cartcontrol :food="food"></my-cartcontrol>
 							</li>
 						</ul>
 					</div>
-				</div>
+				</section>
 			</transition>
 		 </div>
 		<!-- 遮罩层 -->
@@ -42,7 +42,7 @@
 			<div class="mask" v-show="listshow" @touchstart="hidelist">
 			</div>
 		</transition>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -75,9 +75,6 @@
 				enough:false,
 				selectedFoods:[]
 			};
-		},
-		components:{
-			cartcontrol
 		},
 		methods:{
 			scroll(){
@@ -162,6 +159,9 @@
 				}
 				return this.show;
 			},
+		},
+		components:{
+			"my-cartcontrol":cartcontrol
 		}
 	};
 </script>

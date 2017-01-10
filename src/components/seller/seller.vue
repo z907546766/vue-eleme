@@ -1,7 +1,7 @@
 <template>
 	<transition name="slide" enter-active-class="animated slideInRight"  leave-active-class="animated slideOutRight">
-		<div class="seller-wrapper"v-show="showSeller">
-			<div class="caption">
+		<section class="seller-wrapper"v-show="showSeller">
+			<section class="caption">
 				<h1 class="title">商家详情</h1>
 				<div class="back" @touchstart="hide">
 					<i class="icon-arrow_lift"></i>
@@ -9,8 +9,8 @@
 				<div class="bg">
 					<img :src="seller.avatar" alt="背景" width="100%" height="100%">
 				</div>
-			</div>
-			<div class="seller"  id="seller" >
+			</section>
+			<section class="seller"  id="seller" >
 				<div class="scroll">
 					<div class="seller-store">
 						<div class="top">
@@ -20,7 +20,7 @@
 							<div class="info">
 								<h3 class="name" v-text="seller.name"></h3>
 								<p class="desc">
-									<star :score="seller.score" :size="36"></star>
+									<my-star :score="seller.score" :size="36"></my-star>
 									<span class="num" v-text="seller.ratingCount"></span>
 								</p>
 								<div class="sales" v-text="'月售'+seller.sellCount+'单'" ></div>
@@ -55,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-					<divider ></divider>
+					<my-divider ></my-divider>
 					<div class="seller-bulletin">
 						<h3 class="name">商家公告与活动</h3>
 						<p class="text" v-text="seller.bulletin"></p>
@@ -66,7 +66,7 @@
 							</li>
 						</ul>
 					</div>
-					<divider ></divider>
+					<my-divider ></my-divider>
 					<div class="seller-img">
 						<h3 class="name">商家实景</h3>
 						<div id="scroll-wrapper" class="scroll-wrapper">
@@ -78,7 +78,7 @@
 							<div class="line" v-show="active" :class="{active:active}"></div>
 						</div>
 					</div>
-					<divider ></divider>
+					<my-divider ></my-divider>
 					<div class="seller-info">
 						<h3 class="name">商家信息</h3>
 						<ul class="content"  v-show="seller.infos&&seller.infos.length>0">
@@ -86,8 +86,8 @@
 						</ul>
 					</div>
 				</div>
-			</div>
-		</div>
+			</section>
+		</section>
 	</transition>
 </template>
 
@@ -179,8 +179,8 @@ export default {
 			}
 		},
 		components:{
-			star,
-			divider
+			"my-star":star,
+			"my-divider":divider
 		}
 	};
 </script>

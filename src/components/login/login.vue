@@ -1,25 +1,25 @@
 <template>
-	<div class="login">
-		<navbar  @nowPage="nowPage"></navbar>
+	<section class="login">
+		<my-navbar  @nowPage="nowPage"></my-navbar>
 		<form action="" method="post" class="login-form" onSubmit="return false">
 			<div class="loginName">
 				<!-- 手机号码登陆 -->
-				<div v-show="Show">
-					<input type="text" name="username" value="" placeholder="手机号" id="tel" v-model="name" @keyup="checkName" autocomplete="off" maxlength="11" required >
+				<div v-if="Show">
+					<input type="text" name="username" value="" placeholder="手机号" id="tel" v-model.trim.number="name" @keyup="checkName" autocomplete="off" maxlength="11" required  key="tellphone-input">
 					<button @touchstart="sendMsg" v-text="text" :class="{'disabled':disabled}" v-show="Show"></button>
 				</div>
 				<!-- 用户名登陆 -->
-				<div v-if="!Show">
-					<input type="text" name="username" value="" placeholder="手机/邮箱/用户名" id="username" v-model="name" @keyup="checkName" autocomplete="off" maxlength="25" required >
+				<div v-else>
+					<input type="text" name="username" value="" placeholder="手机/邮箱/用户名" id="username" v-model.trim="name" @keyup="checkName" autocomplete="off" maxlength="25" required  key="username-input">
 				</div>
 			</div>
 			<div class="loginpwd">
 				<!-- 验证码 -->
-				<div v-show="Show">
-					<input type="text" name="password" value="" placeholder="验证码" id="code" v-model="pwd" autocomplete="off" maxlength="4" required @keyup="checkPwd">
+				<div v-if="Show">
+					<input type="text" name="password" value="" placeholder="验证码" id="code" v-model.trim="pwd" autocomplete="off" maxlength="4" required @keyup="checkPwd">
 				</div>
 				<!-- 密码登陆 -->
-				<div v-if="!Show">
+				<div v-else>
 					<input type="password" name="password" value="" placeholder="密码" id="password" v-model="pwd" autocomplete="off"required ref="password"@keyup="checkPwd">
 					<span class="switch" :class="{active:active}" @touchstart.prevent.stop="switchNow">
 						<span class="showText">abc</span>
@@ -41,7 +41,7 @@
 				<a href="https://m.ele.me/forget">忘记密码？</a>
 			</div>
 		</form>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -67,14 +67,19 @@
 
 		methods:{
 			nowPage(msg){
+				clearInterval(this.timer);
+				// 切换页面初始化
 				this.name="";
-				if(msg){
-					this.Show=false;
-				}else{
-					// 短信登陆
-					this.Show=true;
-				}
-
+				this.pwd="";
+				// 控制密码登陆显示
+				this.Show=true;
+				this.text="获取验证码";
+				// 发送验证码按钮激活
+				this.disabled=true;
+				// switch激活
+				this.active=false;
+				this.firstDisable=true;
+				this.Show=msg?false:true;
 			},
 			// 验证用户名
 			checkName(){
@@ -147,7 +152,7 @@
 			}
 		},
 		components:{
-			navbar
+			"my-navbar":navbar
 		}
 	};
 </script>

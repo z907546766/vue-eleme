@@ -1,13 +1,13 @@
 <template>
 	<div class="cartcontrol">
 		<transition name="translate">
-			<div class="decrease" v-show="food.count>0"   @tap.stop.prevent="decrease">
+			<section class="decrease" v-show="food.count>0"   @tap.stop.prevent="decrease">
 				<transition name="rotate">
 					<div  v-show="food.count>0" class="icon-wrapper">
 						<i class="icon-remove_circle_outline"></i>
 					</div>
 				</transition>
-			</div>
+			</section>
 		</transition>
 		<div class="text">
 			<span v-show="food.count>0" v-text="food.count"></span>

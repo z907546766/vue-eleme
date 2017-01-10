@@ -2,11 +2,11 @@
 	<div class="search-wrapper" id="searchWrapper">
 		<div class="scroll">
 			<!-- 头部 -->
-			<navbar></navbar>
+			<my-navbar></my-navbar>
 			<!-- 搜索框 -->
 			<form action="" class="search-form">
 				<div class="search">
-					<input type="text" value="" placeholder="请输入商家或美食名称" class="search-input" v-model="val" @keyup="showHistoryPanel($event)">
+					<input type="text" value="" placeholder="请输入商家或美食名称" class="search-input" v-model.trim="val" @keyup.delete="showHistoryPanel($event)">
 					<input type="button" value="搜索" class="search-btn" @touchstart="searchResult" >
 				</div>
 			</form>
@@ -30,7 +30,7 @@
 								<div class="sellerInfo-desc">
 									<h4 class="name">{{item.name}}</h4>
 									<div>
-										<star :size="24" :score="item.score"></star>
+										<my-star :size="24" :score="item.score"></my-star>
 										<span>({{item.ratingCount}})</span>
 										<span>月售{{item.sellCount}}单</span>
 									</div>
@@ -62,10 +62,10 @@
 				</div>
 			</div>
 			<!-- 搜索提示 -->
-			<div  v-show="loadingSuccess" class="loadingInfo">
+			<div  v-show="loadingSuccess&&!historyShowNow" class="loadingInfo">
 				搜索中...
 			</div>
-			<div  v-show="loadingError" class="loadingInfo">
+			<div v-show="!loadingSuccess&&!historyShowNow&&!errorShowNow" class="loadingInfo">
 				网络连接错误,请重试
 			</div>
 			<!-- 加载提示 -->
@@ -97,7 +97,6 @@
 				showMore:false,
 				// 搜索提示
 				loadingSuccess:false,
-				loadingError:false,
 				page:0,
 				loadingText:"加载中...",
 				status:0
@@ -110,13 +109,19 @@
 			}
 		},
 		methods:{
+			init(){
+				this.loadingSuccess=true;
+				// 控制面板的显示和隐藏
+				this.historyShowNow=false;
+				this.successShowNow=false;
+				this.errorShowNow=false;
+			},
 			sendHttp(){
 				if(!this.val){
 					return;
 				};
 				// 搜索提示
 				this.loadingSuccess=true;
-				this.loadingError=false;
 				// 隐藏历史记录
 				this.historyShowNow=false;
 				if(this.firstLoading){
@@ -156,12 +161,10 @@
 				}
 			},(err)=>{
 				this.loadingSuccess=false;
-				this.loadingError=true;
-
 			})
 			},
 			searchResult(){
-				if(this.val==""||!this.val.trim()){
+				if(this.val==""){
 					return;
 				};
 				if(this.myScroll){
@@ -170,16 +173,11 @@
 				// 点击搜索按钮初始化
 				this.page=0;
 				this.firstLoading=true;
-				this.loadingSuccess=true;
-				this.loadingError=false;
-				// 控制面板的显示和隐藏
-				this.historyShowNow=false;
-				this.successShowNow=false;
-				this.errorShowNow=false;
+				this.init();
 				this.sendHttp();
 				// 搜索内容已经搜索过,不在添加在搜索历史
 				for (let i = 0,len=this.historyData.length; i <len; i++) {
-					if(this.historyData[i].trim()==this.val.trim()){
+					if(this.historyData[i]==this.val){
 						return;
 					}
 				}
@@ -225,14 +223,12 @@
 			},
 	  		// 按键为Backspace并且数据为空,显示历史面板
 	  		showHistoryPanel(event){
-	  			if(event.keyCode==8&&this.val==""){
+	  			if(this.val==""){
 	  				// 初始化
 	  				// 搜索提示
+	  				this.init();
 	  				this.loadingSuccess=false;
-	  				this.loadingError=false;
 	  				this.historyShowNow=true;
-	  				this.successShowNow=false;
-	  				this.errorShowNow=false;
 	  				if(this.myScroll){
 	  					this.myScroll.destroy();
 	  				}
@@ -286,8 +282,8 @@
 	  		}
 	  	},
 	  	components:{
-	  		navbar,
-	  		star
+	  		"my-navbar":navbar,
+	  		"my-star":star
 	  	}
 	  };
 	</script>

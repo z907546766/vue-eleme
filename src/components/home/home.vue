@@ -1,7 +1,7 @@
 <template>
-	<div class="home">
-		<navbar @destroyScroll="destroyScroll" ref="navbar"></navbar>
-		<div class="carousel" id="carousel">
+	<section class="home">
+		<my-navbar @destroyScroll="destroyScroll" ref="navbar"></my-navbar>
+		<section class="carousel" id="carousel">
 			<div class="carousel-indicators">
 				<div class="item-wrapper" v-for="category in categorys" v-show="sellers" >
 					<a href="javascript:;" class="item" v-for="item in category.category" v-show="categorys" @tap.stop.prevent="showList($event)">
@@ -16,9 +16,9 @@
 				<span class="active"></span>
 				<span></span>
 			</div>
-		</div>
-		<divider></divider>
-		<div class="sales">
+		</section>
+		<my-divider></my-divider>
+		<section class="sales">
 			<h1 class="title">
 				<span class="text">附近商家</span>
 			</h1>
@@ -34,7 +34,7 @@
 					<div class="info">
 						<h2 class="name" v-text="seller.name"></h2>
 						<div class="score">
-							<star :size="24" :score="score(seller)"></star>
+							<my-star :size="24" :score="score(seller)"></my-star>
 							<span class="score-num">{{score(seller)}}</span>
 							<span class="sell-num">月售{{seller.sellCount}}单</span>
 						</div>
@@ -45,14 +45,14 @@
 					</div>
 				</li>
 			</ul>
-		</div>
+		</section>
 		<div class="reloadMore" v-show="showMore">{{loadingText}}</div>
-	</div>
+	</section>
 </template>
 
 <script>
-	import iScroll from "../../../static/javascript/iscroll-probe.js"
-	import {slide} from "../../common/js/slide.js";
+import iScroll from "../../../static/javascript/iscroll-probe.js"
+import {slide} from "../../common/js/slide.js";
 // 加载组件
 import divider from "../divider/divider.vue";
 import star from "../star/star.vue";
@@ -158,12 +158,15 @@ export default {
 		destroyScroll(){
 			// 销毁滚动
 			this.myScroll.destroy();
+		},
+		showList(){
+
 		}
 	},
 	components:{
-		divider,
-		navbar,
-		star
+		"my-divider":divider,
+		"my-navbar":navbar,
+		"my-star":star
 	}
 };
 </script>

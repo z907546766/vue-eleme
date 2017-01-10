@@ -1,7 +1,7 @@
 <template>
-	<div class="ratingSelect">
+	<section class="ratingSelect">
 		<!-- 切换 -->
-		<div class="ratingType-wrapper">
+		<section class="ratingType-wrapper">
 			<div class="ratingType">
 				<div :class="{active:nowSelected==2}" @tap="select(2,$event)">
 					<span v-text="ratingType.all"></span>
@@ -16,7 +16,7 @@
 					<i v-text="negative.length"></i>
 				</div>
 			</div>
-		</div>
+		</section>
 		<!-- 只看内容 -->
 		<p class="swich">
 			<span class="icon icon-check_circle" :class="{on:nowChecked}" @tap="check($event)"></span>
@@ -24,13 +24,15 @@
 		</p>
 		<ul class="content" v-show="ratings||ratings.length>0">
 			<li v-for="rating in ratings" v-show="filterContent(rating.text,rating.rateType)" >
-				<ratingContent1  :rating="rating" v-show="pageId===1"></ratingContent1>
-				<ratingContent2  :rating="rating"  v-show="pageId===2"></ratingContent2 >
+				<my-ratingContent1  :rating="rating" v-show="pageId===1"></my-ratingContent1>
+				<my-ratingContent2  :rating="rating"  v-show="pageId===2"></my-ratingContent2 >
 				</li>
-			</ul>
-			<div class="no-text" v-show="ratings.length===0||!ratings">暂无评价</div>
+		</ul>
+		<div class="no-text" v-show="ratings.length===0||!ratings">
+			暂无评价
 		</div>
-	</template>
+	</section>
+</template>
 
 	<script>
 		import ratingContent1 from "../ratingContent1/ratingContent1.vue"
@@ -123,8 +125,8 @@
 			}
 		},
 		components:{
-			ratingContent1,
-			ratingContent2
+			"my-ratingContent1":ratingContent1,
+			"my-ratingContent2":ratingContent2
 		}
 	};
 </script>

@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide" enter-active-class="animated slideInRight"  leave-active-class="animated slideOutRight">
-		<div class="rating-wrapper" id="ratings">
+		<section class="rating-wrapper" id="ratings">
 			<div class="scroll">
 				<div class="rating">
 					<div class="rating-left">
@@ -11,12 +11,13 @@
 					<div class="rating-right">
 						<div class="score-wrapper">
 							<span class="title">服务态度</span>
-							<star :size="36" :score="seller.serviceScore"></star>
+							<my-star :size="36" :score="seller.serviceScore">
+							</my-star>
 							<span class="score" v-text="seller.serviceScore"></span>
 						</div>
 						<div class="score-wrapper">
 							<span class="title">描述相符</span>
-							<star :size="36" :score="seller.foodScore"></star>
+							<my-star :size="36" :score="seller.foodScore"></my-star>
 							<span class="score" v-text="seller.foodScore"></span>
 						</div>
 						<div class="score-wrapper">
@@ -25,21 +26,19 @@
 						</div>
 					</div>
 				</div>
-				<divider></divider>
-				<ratingSelect :ratingType="ratingType" :pageId="pageId" :state="state" @select="nowSelected" @check="nowChecked" :ratings="ratings" :onlyContent="onlyContent"></ratingSelect>
+				<my-divider></my-divider>
+				<my-ratingSelect :ratingType="ratingType" :pageId="pageId" :state="state" @select="nowSelected" @check="nowChecked" :ratings="ratings" :onlyContent="onlyContent"></my-ratingSelect>
 			</div>
-		</div>
+		</section>
 	</transition>
 </template>
 
 <script>
 	import iScroll from "../../../static/javascript/iscroll-probe.js"
-
 // 加载组件
 import star from "../star/star.vue";
 import divider from "../divider/divider.vue";
 import ratingSelect from "../ratingSelect/ratingSelect.vue";
-import shopcart from "../shopcart/shopcart.vue";
 const ratingType={
 	all:"全部",
 	positive:"满意",
@@ -75,7 +74,7 @@ export default {
 			},
 			methods:{
 				feachData(){
-					this.$http.get("http://localhost:8086/ratings?id="+this.$route.query._id+"").then((data)=>{
+	this.$http.get("http://localhost:8086/ratings?id="+this.$route.query._id+"").then((data)=>{
     		 // 成功
     		 var json=data.data;
     		 if(json.error==ERR_OK){
@@ -96,112 +95,111 @@ export default {
     		},(err)=>{
     			console.log(err);
     		});
-				},
+},
 				// ratingSelect中触发
 				nowSelected(nowSelected){
-					this.$nextTick(()=>{
-						this.myScroll.refresh();
-					})
-				},
+	this.$nextTick(()=>{
+		this.myScroll.refresh();
+	})
+},
 				// ratingSelect中触发
 				nowChecked(nowChecked){
-					this.$nextTick(()=>{
-						this.myScroll.refresh();
-					})
-				},
-				scroll(){
-					this.myScroll=new iScroll("#ratings",{
-						tap:true
-					})
+	this.$nextTick(()=>{
+		this.myScroll.refresh();
+	})
+},
+scroll(){
+	this.myScroll=new iScroll("#ratings",{
+		tap:true
+	})
+}
+},
+components:{
+	"my-star":star,
+	"my-divider":divider,
+	"my-ratingSelect":ratingSelect,
+}
+};
+</script>
+
+<style lang="less" scoped>
+	@import url("../../../static/less/reset.less");
+	@import url("../../../static/css/animate.css");
+	.slideInRight,.slideOutRight{
+		-webkit-animation-duration:.2s;
+	}
+	.rating-wrapper{
+		position: fixed;
+		left:0;
+		top: 0;
+		box-sizing: border-box;
+		width: 100%;
+		height:100%;
+		overflow: hidden;
+		z-index:-1;
+		background: #fff;
+		padding-top: 4.64rem;
+		.rating{
+			padding:0.48rem;
+			display: -webkit-box;
+			display:flex;
+			.rating-left{
+				margin-right: 0.64rem;
+				width: 3.666667rem - 0.48rem;
+				margin-left: -0.48rem;
+				text-align: center;
+				border-right: 1px solid rgb(147,153,159);
+
+				.score{
+					color: rgb(255,153,0);
+					line-height:0.746667rem;
+					.fontSize(24px);
 				}
-			},
-			components:{
-				star,
-				divider,
-				ratingSelect,
-				shopcart
+				.ComScore{
+					margin-top:0.16rem;
+					color: rgb(7,17,27);
+					line-height:0.32rem;
+					.fontSize(12px);
+				}
+				.overtop{
+					margin-top:0.213333rem;
+					padding-bottom: 0.16rem;
+					color: rgb(147,153,159);
+					line-height:0.266667rem;
+					.fontSize(10px);
+				}
 			}
-		};
-	</script>
-
-	<style lang="less" scoped>
-		@import url("../../../static/less/reset.less");
-		@import url("../../../static/css/animate.css");
-		.slideInRight,.slideOutRight{
-			-webkit-animation-duration:.2s;
-		}
-		.rating-wrapper{
-			position: fixed;
-			left:0;
-			top: 0;
-			box-sizing: border-box;
-			width: 100%;
-			height:100%;
-			overflow: hidden;
-			z-index:-1;
-			background: #fff;
-			padding-top: 4.64rem;
-			.rating{
-				padding:0.48rem;
-				display: -webkit-box;
-				display:flex;
-				.rating-left{
-					margin-right: 0.64rem;
-					width: 3.666667rem - 0.48rem;
-					margin-left: -0.48rem;
-					text-align: center;
-					border-right: 1px solid rgb(147,153,159);
-
-					.score{
-						color: rgb(255,153,0);
-						line-height:0.746667rem;
-						.fontSize(24px);
+			.rating-right{
+				div{
+					line-height: 0.48rem;
+					display: -webkit-box;
+					display: flex;
+					&+div{
+						margin-top: 0.213333rem;
 					}
-					.ComScore{
-						margin-top:0.16rem;
-						color: rgb(7,17,27);
-						line-height:0.32rem;
+					span{
 						.fontSize(12px);
-					}
-					.overtop{
-						margin-top:0.213333rem;
-						padding-bottom: 0.16rem;
-						color: rgb(147,153,159);
-						line-height:0.266667rem;
-						.fontSize(10px);
-					}
-				}
-				.rating-right{
-					div{
-						line-height: 0.48rem;
-						display: -webkit-box;
-						display: flex;
-						&+div{
-							margin-top: 0.213333rem;
+						&.title{
+							margin-right:0.32rem;
+							color: rgb(7,17,27);
 						}
-						span{
-							.fontSize(12px);
-							&.title{
-								margin-right:0.32rem;
-								color: rgb(7,17,27);
-							}
-							&.score{
-								margin-left:0.32rem;
-								color: rgb(255,153,0);
-							}
-							&.time{
-								color: rgb(147,153,159);
-							}
+						&.score{
+							margin-left:0.32rem;
+							color: rgb(255,153,0);
+						}
+						&.time{
+							color: rgb(147,153,159);
 						}
 					}
 				}
-			}
-			// 分割条
-			.divider{
-				margin-left: 0;
-			}
-			.ratingSelect{
 			}
 		}
+		// 分割条
+		.divider{
+			margin-left: 0;
+		}
+		.ratingSelect{
+		}
+	}
 
 	</style>

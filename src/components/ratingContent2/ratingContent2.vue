@@ -1,5 +1,5 @@
 <template>
-	<div class="ratingContent">
+	<section class="ratingContent">
 		<div class="top">
 			<div class="pic">
 				<img :src="rating.avatar" alt="商家" width="100%" height="100%">
@@ -10,7 +10,7 @@
 					<span class="time">{{ rating.rateTime | formatD }}</span>
 				</p>
 				<p>
-					<star :size="24" :score="rating.score"></star>
+					<my-star :size="24" :score="rating.score"></my-star>
 					<span class="catchTime" v-text="rating.deliveryTime+'分钟送达'" v-show="rating.deliveryTime"></span>
 				</p>
 			</div>
@@ -23,8 +23,7 @@
 
 			</p>
 		</div>
-
-	</div>
+	</section>
 </template>
 
 <script>
@@ -41,7 +40,7 @@ export default {
 		}
 	},
 	components:{
-		star
+		"my-star":star
 	}
 
 };

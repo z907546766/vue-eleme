@@ -1,5 +1,5 @@
 <template>
-	<div class="navbar">
+	<nav class="navbar">
 		<div class="icon-wrapper"  @touchstart="back($event)">
 			<i class="icon" :class="{'icon-search':searchIcon,'icon-arrow_lift':backIcon}"></i>
 		</div>
@@ -12,7 +12,7 @@
 			<!-- 登陆后图标 -->
 			<i class="icon icon-user" v-show="myselfIcon"></i>
 		</div>
-	</div>
+	</nav>
 </template>
 
 <script>

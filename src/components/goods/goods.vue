@@ -1,14 +1,15 @@
 <template>
 	<transition name="slide" enter-active-class="animated slideInLeft"  leave-active-class="animated slideOutLeft">
-		<div class="goods-wrapper">
+		<section class="goods-wrapper">
 			<div v-show="loading" class="data-tooltip">
 				正在加载中,请稍后...
 			</div>
 			<div v-show="err" class="data-tooltip">
 				加载失败,请重新加载！
 			</div>
-			<div class="goods" v-show="goods">
-				<div class="menu-wrapper" id="menuWrapper">
+			<section class="goods" v-show="goods">
+				<!-- 菜单栏 -->
+				<section class="menu-wrapper" id="menuWrapper">
 					<ul>
 						<li v-for="(item,index) in goods" :class="{active:index==nowIndex}" @tap="scrollTo(index,$event)" >
 							<span class="text">
@@ -17,8 +18,9 @@
 							</span>
 						</li>
 					</ul>
-				</div>
-				<div class="foods-wrapper" id="foodsWrapper" ref="foodsWrapper">
+				</section>
+				<!-- 商品栏 -->
+				<section class="foods-wrapper" id="foodsWrapper" ref="foodsWrapper">
 					<ul>
 						<li v-for="item in goods" class="food-list food-list-hook" >
 							<h3 v-text="item.name"></h3>
@@ -40,18 +42,18 @@
 										<p class="price" >
 											<span v-text="'￥'+food.price"></span>
 											<del  v-text="food.oldPrice"></del>
-											<cartcontrol :food="food"></cartcontrol>
+											<my-cartcontrol :food="food"></my-cartcontrol>
 										</p>
 									</div>
 								</li>
 							</ul>
 						</li>
 					</ul>
-				</div>
-			</div>
-			<shopcart :deliveryPrice="seller.deliveryPrice"  :minPrice="seller.minPrice" :selectFoods="selectFoods"></shopcart>
-			<food :food="selectedFoods" ref="food"></food>
-		</div>
+				</section>
+			</section>
+			<my-shopcart :deliveryPrice="seller.deliveryPrice"  :minPrice="seller.minPrice" :selectFoods="selectFoods"></my-shopcart>
+			<my-food :food="selectedFoods" ref="food"></my-food>
+		</section>
 	</transition>
 </template>
 <script>
@@ -182,9 +184,9 @@
 			}
 		},
 		components:{
-			shopcart,
-			cartcontrol,
-			food
+			"my-shopcart":shopcart,
+			"my-cartcontrol":cartcontrol,
+			"my-food":food
 		}
 	};
 </script>

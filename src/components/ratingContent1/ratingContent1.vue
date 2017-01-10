@@ -1,5 +1,5 @@
 <template>
-	<div class="ratingContent">
+	<section class="ratingContent">
 		<div class="top">
 			<span class="time">{{rating.rateTime | formatD }}</span>
 			<span class="username"  v-text="rating.username"></span>
@@ -11,7 +11,7 @@
 			<span class="icon" :class="{'icon-thumb_up':rating.rateType==0,'icon-thumb_down':rating.rateType==1,'active':rating.rateType==0}"></span>
 			<span class="text" v-text="rating.text"></span>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script>

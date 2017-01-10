@@ -2,7 +2,7 @@
 	<transition  name="slide"
 	enter-active-class="animated slideInRight"
 	leave-active-class="animated slideOutRight">
-		<div class="food" v-show="showFlag" id="food">
+		<section class="food" v-show="showFlag" id="food">
 			<div class="scroll">
 				<div class="food-pic">
 					<img :src="food.image" alt="食物" width="100%" height="100%">
@@ -22,29 +22,29 @@
 							<span v-text="'￥'+food.price"></span>
 							<del v-text="food.oldPrice||''" ></del>
 							<button v-show="!food.count||food.count==0" @touchstart="addFood($event)">加入购物车</button>
-							<cartcontrol :food="food" v-show="food.count>0" ></cartcontrol>
+							<my-cartcontrol :food="food" v-show="food.count>0" ></my-cartcontrol>
 						</div>
 					</div>
 					<!-- 分割条 -->
-					<divider></divider>
+					<my-divider></my-divider>
 					<!-- 商品介绍 -->
 					<div class="food-desc">
 						<h4 class="title">商品介绍</h4>
 						<p class="desc" v-text="food.info"v-show="food.info" ></p>
 					</div>
 					<!-- 分割条 -->
-					<divider></divider>
+					<my-divider></my-divider>
 					<!-- 评论 -->
 					<div class="food-rating">
 						<h4 class="title">商品评价</h4>
 						<!-- 组件 -->
-						<reatingSelect :ratings="food.ratings" :ratingType="ratingType" :pageId="pageId" :onlyContent="onlyContent" :state="state" @select="nowSelected" @check="nowChecked" ref="reatingSelect"></reatingSelect>
+						<my-reatingSelect :ratings="food.ratings" :ratingType="ratingType" :pageId="pageId" :onlyContent="onlyContent" :state="state" @select="nowSelected" @check="nowChecked" ref="reatingSelect"></my-reatingSelect>
 					</div>
 					<!-- 占位 -->
 					<div class="bottom"></div>
 				</div>
 			</div>
-		</div>
+		</section>
 	</transition>
 </template>
 
@@ -126,9 +126,9 @@
 			}
 		},
 		components:{
-			cartcontrol,
-			divider,
-			reatingSelect
+			"my-cartcontrol":cartcontrol,
+			"my-divider":divider,
+			"my-reatingSelect":reatingSelect
 		},
 	};
 </script>

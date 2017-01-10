@@ -1,21 +1,21 @@
  <template>
      <transition name="slide" enter-active-class="animated sildeInRight"  leave-active-class="animated sildeOutRight">
-        <div class="sales">
-            <v-header :seller="selectedSeller" @clearlocalS="clearlocalS"></v-header>
-            <div class="tab">
-                <div class="tab-item">
+        <section class="sales">
+            <my-header :seller="selectedSeller" @clearlocalS="clearlocalS"></my-header>
+            <ul class="tab">
+                <li class="tab-item">
                     <router-link :to="{path:'/sales/goods',query:{_id:selectedSeller._id}}" class="tab-item-list">
                         <span>商品</span>
                     </router-link>
-                </div>
-                <div class="tab-item">
+                </li>
+                <li class="tab-item">
                     <router-link  :to="{path:'/sales/rating',query:{_id:selectedSeller._id} }"  class="tab-item-list">
                         <span v-text="'评价 ('+score+'分)'"></span>
                     </router-link>
-                </div>
-            </div>
+                </li>
+            </ul>
             <router-view :seller="selectedSeller" ref="goods" :score="score"></router-view>
-        </div>
+        </section>
     </transition>
 </template>
 
@@ -54,7 +54,7 @@
         }
     },
     components: {
-     "v-header":header
+     "my-header":header
  }
 }
 </script>

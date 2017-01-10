@@ -1,7 +1,7 @@
 <template>
-	<div class="home-wrapper" id="homeWrapper" >
+	<section class="home-wrapper" id="homeWrapper" >
 		<router-view @getSellersData="getSellersData" @getSelectData="getSelectData" :selectSeller="selectData" :_id="sellersData._id"></router-view>
-	</div>
+	</section>
 </template>
 
 <script>

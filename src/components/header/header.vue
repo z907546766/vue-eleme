@@ -42,12 +42,12 @@
 		</div>
 		<!-- 弹出层 -->
 		<transition name="fade">
-			<div class="detail" v-show="detailShow">
+			<section class="detail" v-show="detailShow">
 				<div class="detail-wrapper clearfix">
 					<div class="detail-main">
 						<h1 class="title" v-text="seller.name"></h1>
 						<div class="starwrapper">
-							<star :size="48" :score="seller.score"  ></star>
+							<my-star :size="48" :score="seller.score"  ></my-star>
 						</div>
 						<div class="content">
 							<section class="offers-info ">
@@ -79,16 +79,16 @@
 				</div>
 				<div class="detail-close">
 					<i class="icon-close" @touchstart="show">
-					</div>
 				</div>
-			</transition>
-			<Seller :seller="seller" ref="sellerShow" ></Seller>
+			</section>
+		</transition>
+			<my-seller :seller="seller" ref="sellerShow" ></my-seller>
 		</header>
 	</template>
 
 	<script>
 	// 加载组件
-	import Seller from "../seller/seller.vue"
+	import seller from "../seller/seller.vue"
 	import star from "../star/star.vue"
 	export default {
 		name: 'seller',
@@ -116,8 +116,8 @@
 			}
 		},
 		components:{
-			Seller,
-			star
+			"my-seller":seller,
+			"my-star":star
 		}
 	};
 </script>
