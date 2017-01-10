@@ -8,19 +8,22 @@
 （该作品为个人学习vue时候的练习demo,其中有很多不足之处,欢迎指正！）
 
 ###效果图:
-![img]()
+
+![img](https://github.com/z907546766/vue-eleme/blob/master/static/img/vueEleme.gif)
 
 ###原理说明
+
 * 作品基于vue2.0构建。
 * 使用iScroll.js进行页面的滚动效果。
 * 使用淘宝flexible.js进行页面的适配。
 * 使用animate.css实现动画效果。
 * 使用百度地图api进行初略地址模拟。
-* 使用less进行css编写。
+* 使用less进行css编译。
 * 服务端使用koa2搭建,通过使用mock.js模拟数据。
 
 
 ###使用方法
+
 1、运行Vue
 
 		npm run dev
@@ -31,6 +34,7 @@
 
 
 ### 注意事项
+
 node文件夹与vue项目分开后再运行！！
 
 
