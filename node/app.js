@@ -5,14 +5,14 @@ const router = require("koa-router")();
 const mongoose = require("mongoose");
 // 解决跨域
 const koaCors = require("koa-cors");
-// 连接数据库
-mongoose.connect('mongodb://localhost/sales', function(err) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("数据库连接成功的哈~");
-    }
-});
+// // 连接数据库
+// mongoose.connect('mongodb://localhost/sales', function(err) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log("数据库连接成功的哈~");
+//     }
+// });
 // 引入路由
 const index = require("./routes/index");
 // 使用中间件

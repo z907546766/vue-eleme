@@ -1,90 +1,88 @@
+/**
+ *本地数据
+ */
 const router = require('koa-router')();
-const Seller = require('../schemas/seller.js');
-const Goods = require('../schemas/goods.js');
-const Ratings = require('../schemas/ratings.js');
-const Category = require('../schemas/category.js');
+const sellers=require("../data/seller.js")
+const goods=require("../data/goods.js")
+const ratings=require("../data/ratings.js")
+const category=require("../data/category.js")
 
 router.get('/home', async(ctx, next) => {
-    let categoryData;
-    // 获取分类
-    await Category.find({}).exec().then((category) => {
-        categoryData = category;
-    }, (err) => {
-        handleError(err);
-    });
-    // 获取商家信息
-    await Seller.findOne({}).exec().then((seller) => {
-        ctx.body = {
-            seller: seller,
-            category: categoryData,
-            error: 0
-        };
-    }, (err) => {
-        handleError(err);
-    });
-    next();
+	ctx.body={
+		sellers:sellers.data[0],
+		category:category.data,
+		error: 0
+	}
+	await next()
 })
 router.get('/goods', async(ctx, next) => {
-    let _id = ctx.request.query.id;
-    await Goods.findById({ _id: _id }).exec().then((goods) => {
-        ctx.body = {
-            goods: goods,
-            error: 0
-        }
-    }, (err) => {
-        handleError(err);
-    })
-    next()
+	let _id=ctx.request.query.id;
+	for (let i = 0,len=goods.data.length; i <len ; i++) {
+		let _this=goods.data[i];
+		if(_this._id==_id){
+			ctx.body={
+				goods:_this,
+				error: 0
+			}
+		}
+	}
+	await next()
 })
 router.get('/ratings', async(ctx, next) => {
-    let _id = ctx.request.query.id;
-    await Ratings.findById({ _id: _id }).exec()
-        .then((ratings) => {
-            ctx.body = {
-                ratings: ratings,
-                error: 0
-            }
-        }, (err) => {
-            handleError(err);
-        })
-    next()
+	let _id=ctx.request.query.id;
+	for (let i = 0,len=ratings.data.length; i <len ; i++) {
+		let _this=ratings.data[i];
+		if(_this._id==_id){
+			ctx.body={
+				ratings:_this,
+				error: 0
+			}
+		}
+	}
+	await next()
 })
-router.get("/search", async(ctx, next) => {
-    let data = ctx.request.query;
-    let name = data.name;
-    let page = data.page;
-    let now = page * 4;
-    let re = new RegExp(`(${name})`, 'i');
-    let resultArr = [];
-    let status;
-    // 模拟初略查询
-    await Seller.find({}).limit(4).skip(now).exec().then((seller) => {
-        // 数据加载完毕
-        if (seller.length == 0) {
-            status = 2;
-        } else {
-            for (let i = 0, len = seller.length; i < len; i++) {
-                let result = seller[i].sellers
-                for (let j = 0; j < result.length; j++) {
-                    if (re.test(result[j].name)) {
-                        // 返回结果数据
-                        status = 1;
-                        resultArr.push(result[j]);
-                    }
-                }
-            }
-            // 未找到符合数据
-            if (resultArr.length == 0) {
-                status = 0;
-            }
-        }
-        ctx.body = {
-            data: resultArr,
-            status: status
-        }
-    }, (err) => {
-        handleError(err);
-    });
-    next();
+router.get('/search', async(ctx, next) => {
+	// 获取到前台数据
+	let data=ctx.request.query;
+	let name=data.name;
+	let page=Number(data.page);
+	// 本地数据
+	let seller=sellers.data;
+	// 定义查询规则
+	let re = new RegExp(`(${name})`, 'i');
+	let start=page * 4;
+	let end = (page+1) * 4;
+	let resultArr = [];
+	let status;
+	// 超过条数
+	if(end>seller.length){
+		end=seller.length;
+	}
+	if(start>seller.length){
+		start=seller.length;
+	}
+	if(start==end){
+		status = 2;
+	}else{
+		for (let i = start; i <end ; i++) {
+			let _this=seller[i].sellers;
+			for (let j = 0,len=_this.length; j <len; j++) {
+				if(re.test(_this[j].name)){
+				 // 返回结果数据
+				 status = 1;
+				 resultArr.push(_this[j]);
+				}
+			}
+		}
+	// 未找到符合数据
+	if (resultArr.length == 0) {
+		status = 0;
+	}
+}
+ctx.body = {
+	data: resultArr,
+	status: status
+}
+await next()
 })
-module.exports = router;
+module.exports=router;

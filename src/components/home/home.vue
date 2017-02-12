@@ -160,7 +160,6 @@ export default {
 			this.myScroll.destroy();
 		},
 		showList(){
-
 		}
 	},
 	components:{
